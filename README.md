@@ -37,6 +37,35 @@ Then, run:
 electron-test-build --app-folder ~/Desktop/app --electron-folder ~/Desktop/electron --name Slack --output-folder ~/Desktop/output
 ```
 
+### Example: Windows
+
+On Windows, have two folders on your desktop:
+
+```
+- app
+--- resources
+------ electron.asar
+------ [...]
+--- chrome_100_percent.pak
+--- [...]
+--- Slack.exe
+--- ffmpeg.dll
+--- [...]
+- electron
+--- resources
+------ default_app.asar
+------ electron.asar
+--- chrome_100_percent.pak
+--- [...]
+--- electron.exe
+--- ffmpeg.dll
+--- [...]
+```
+
+```ps1
+electron-test-build --app-folder C:\Users\felix\Desktop\slack\ --electron-folder 'C:\Users\felix\Desktop\electron\' --version "3.4.90" --icon C:\Users\felix\Code\slack-desktop\resources\win\app.ico --output-folder C:\Users\felix\Desktop\testbuild --name Slack
+```
+
 ## License
 
 MIT, please see LICENSE.md for details.
