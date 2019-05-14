@@ -16,7 +16,7 @@ function getElectronPath (options = {}) {
   return path.join(options.electronFolder, `Electron.app`)
 }
 
-async function prepareFolder(options = {}) {
+async function prepareFolder (options = {}) {
   debug(`Emptying output folder ${options.outputFolder}`)
   await fs.emptyDir(options.outputFolder)
 
@@ -26,13 +26,13 @@ async function prepareFolder(options = {}) {
   await fs.copy(src, dest)
 }
 
-async function deleteSignature(options = {}) {
+async function deleteSignature (options = {}) {
   const signaturePath = path.join(getBinaryPath(options), 'Contents/_CodeSignature')
   debug(`Deleting code signature in ${signaturePath}`)
   await fs.remove(signaturePath)
 }
 
-async function overwrite(options = {}, target = '') {
+async function overwrite (options = {}, target = '') {
   try {
     await fs.remove(path.join(getBinaryPath(options), target))
     await fs.copy(
@@ -55,7 +55,7 @@ async function overwrite(options = {}, target = '') {
   }
 }
 
-async function execute(options = {}) {
+async function execute (options = {}) {
   await prepareFolder(options)
 
   // Copy innards over

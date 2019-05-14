@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const rcedit = require('rcedit')
+const path = require('path')
 
 const { sanitizeAppName } = require('./utils')
 
@@ -53,7 +54,7 @@ async function execRcedit (options = {}) {
   })
 }
 
-async function execute(options = {}) {
+async function execute (options = {}) {
   await prepareFolder(options)
   await execRcedit(options)
 }

@@ -59,7 +59,7 @@ function ensureOptions (options = {}) {
     warnings.push('Argument missing: output-folder')
   }
 
-  if (process.platform ==='win32' && !options.version) {
+  if (process.platform === 'win32' && !options.version) {
     warnings.push('Argument missing: version')
   }
 
@@ -86,7 +86,7 @@ function ensureOptions (options = {}) {
     ? path.join(process.cwd(), options['output-folder'])
     : options['output-folder'] && path.join(options['output-folder'])
 
-  if (!outputFolder ) {
+  if (!outputFolder) {
     warnings.push('Argument missing: output-folder')
   }
 
