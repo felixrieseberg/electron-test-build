@@ -6,6 +6,8 @@ This tool takes a built Electron app and replaces the version of Electron with a
 
 ## Usage
 
+Install the tool with `npm install --global electron-test-build` or use it with `npx electron-test-build`.
+
 ```
   -a, --app-folder        path      Path to your app. Should contain the built binary.
   -e, --electron-folder   path      Path to your Electron build. Should contain the Electron binary.
