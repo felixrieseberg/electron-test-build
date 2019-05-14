@@ -2,8 +2,6 @@
 
 This tool takes a built Electron app and replaces the version of Electron with a custom build.
 
-> :warning: Currently only supports Windows
-
 ## Usage
 
 Install the tool with `npm install --global electron-test-build` or use it with `npx electron-test-build`.
