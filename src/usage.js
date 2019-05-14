@@ -1,5 +1,7 @@
 const commandLineUsage = require('command-line-usage')
 
+const binName = process.platform === 'win32' ? 'exe' : 'app'
+
 const sections = [
   {
     header: 'electron-test-build',
@@ -12,13 +14,13 @@ const sections = [
         name: 'app-folder',
         alias: 'a',
         typeLabel: '{underline path}',
-        description: 'Path to your app. Should contain the built binary.'
+        description: `Path to your app. Should contain the built binary (${binName}).`
       },
       {
         name: 'electron-folder',
         alias: 'e',
         typeLabel: '{underline path}',
-        description: 'Path to your Electron build. Should contain the Electron binary.'
+        description: `Path to your Electron build. Should contain the Electron binary (${binName}).`
       },
       {
         name: 'output-folder',
@@ -36,19 +38,19 @@ const sections = [
         name: 'version',
         alias: 'v',
         typeLabel: '{underline string}',
-        description: `App's version.`
+        description: `App's version. Only used on Windows.`
       },
       {
         name: 'icon',
         alias: 'i',
         typeLabel: '{underline path}',
-        description: '[Optional] Path to an icon.'
+        description: '[Optional] Path to an icon. Only used on Windows.'
       },
       {
         name: 'copyright',
         alias: 'c',
         typeLabel: '{underline string}',
-        description: '[Optional] Copyright notice to add.'
+        description: '[Optional] Copyright notice to add. Only used on Windows.'
       },
       {
         name: 'help',

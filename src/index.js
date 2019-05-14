@@ -3,8 +3,6 @@
 const path = require('path')
 const fs = require('fs-extra')
 const commandLineArgs = require('command-line-args')
-const rcedit = require('rcedit')
-const sanitize = require('sanitize-filename')
 
 const { printHelp } = require('./usage')
 
@@ -20,6 +18,7 @@ const optionDefinitions = [
 ]
 
 async function main () {
+  const startTime = Date.now()
   const rawOptions = commandLineArgs(optionDefinitions)
   if (rawOptions.help) printHelp()
 
@@ -29,17 +28,20 @@ async function main () {
   console.log(`  - Path to app folder: ${options.appFolder}`)
   console.log(`  - Path to Electron folder: ${options.electronFolder}`)
   console.log(`  - Path to icon: ${options.icon || '(unchanged)'}`)
-  console.log(`  - Version: ${options.version}`)
+  console.log(`  - Version: ${options.version || '(unchanged)'}}`)
   console.log(`  - Name: ${options.name}`)
   console.log(`  - Copyright notice: ${options.copyright || '(unchanged)'}`)
-  console.log(`  - Creating output in: ${options.outputFolder}`)
+  console.log(`  - Creating output in: ${options.outputFolder}\n`)
 
-  await prepareFolder(options)
-  await execRcedit(options)
-}
+  if (process.platform === 'win32') {
+    require('./platform-win').execute(options)
+  }
 
-function sanitizeAppName (name) {
-  return sanitize(name)
+  if (process.platform === 'darwin') {
+    require('./platform-mac').execute(options)
+  }
+
+  console.log(`🚀 All done (in %dms). Output ready in: ${options.outputFolder}`, new Date() - startTime)
 }
 
 function ensureOptions (options = {}) {
@@ -57,7 +59,7 @@ function ensureOptions (options = {}) {
     warnings.push('Argument missing: output-folder')
   }
 
-  if (!options.version) {
+  if (process.platform ==='win32' && !options.version) {
     warnings.push('Argument missing: version')
   }
 
@@ -80,15 +82,19 @@ function ensureOptions (options = {}) {
     warnings.push(`Electron folder path cannot be found: ${electronFolder}`)
   }
 
+  const outputFolder = options['output-folder'] && options['output-folder'].startsWith('.')
+    ? path.join(process.cwd(), options['output-folder'])
+    : options['output-folder'] && path.join(options['output-folder'])
+
+  if (!outputFolder ) {
+    warnings.push('Argument missing: output-folder')
+  }
+
   if (warnings.length > 0) {
     warnings.forEach((w) => console.log(w))
     console.log(`To see the help, run the tool with --help. We will now exit.`)
     process.exit()
   }
-
-  const outputFolder = options['output-folder'].startsWith('.')
-    ? path.join(process.cwd(), options['output-folder'])
-    : path.join(options['output-folder'])
 
   return {
     version: options.version,
@@ -99,56 +105,6 @@ function ensureOptions (options = {}) {
     copyright: options.copyright,
     outputFolder
   }
-}
-
-function getBinaryName (options = {}) {
-  return `${sanitizeAppName(options.name)}.exe`
-}
-
-function getBinaryPath (options = {}) {
-  return path.join(options.outputFolder, `${getBinaryName(options)}`)
-}
-
-function getElectronPath (options = {}) {
-  return path.join(options.outputFolder, `electron.exe`)
-}
-
-async function prepareFolder (options = {}) {
-  await fs.emptyDir(options.outputFolder)
-  await fs.copy(options.appFolder, options.outputFolder)
-  await fs.copy(options.electronFolder, options.outputFolder)
-
-  // Delete the original file
-  if (fs.existsSync(getBinaryPath(options))) {
-    await fs.remove(getBinaryPath(options))
-  }
-
-  // We expect that an `electron.exe` is now here
-  await fs.rename(getElectronPath(options), getBinaryPath(options))
-}
-
-async function execRcedit (options = {}) {
-  const rcEditOptions = {
-    FileDescription: options.name,
-    InternalName: options.name,
-    OriginalFilename: `${sanitizeAppName(options.name)}.exe`,
-    ProductName: options.name,
-    Copyright: options.copyright,
-    'version-string': options.version,
-    'file-version': options.version,
-    'product-version': options.version,
-    icon: options.icon
-  }
-
-  return new Promise((resolve, reject) => {
-    rcedit(getBinaryPath(options), rcEditOptions, (error) => {
-      if (error) {
-        return reject(error)
-      }
-
-      return resolve()
-    })
-  })
 }
 
 main()
