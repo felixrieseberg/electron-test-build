@@ -28,7 +28,7 @@ async function main () {
   console.log(`  - Path to app folder: ${options.appFolder}`)
   console.log(`  - Path to Electron folder: ${options.electronFolder}`)
   console.log(`  - Path to icon: ${options.icon || '(unchanged)'}`)
-  console.log(`  - Version: ${options.version || '(unchanged)'}}`)
+  console.log(`  - Version: ${options.version || '(unchanged)'}`)
   console.log(`  - Name: ${options.name}`)
   console.log(`  - Copyright notice: ${options.copyright || '(unchanged)'}`)
   console.log(`  - Creating output in: ${options.outputFolder}\n`)
