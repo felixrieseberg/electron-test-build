@@ -1,6 +1,6 @@
 {
   "name": "electron-test-build",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Create builds of your app with a custom version of Electron",
   "main": "src/index.js",
   "bin": "src/index.js",
